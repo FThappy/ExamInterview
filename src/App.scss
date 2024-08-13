@@ -1,0 +1,87 @@
+.main {
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  .btnContainer {
+    display: flex;
+    gap: 1rem;
+    button {
+      border-radius: 0.5rem;
+      border-width: 0;
+      background-color: #04dcf8;
+      color: white;
+      font-weight: bold;
+      padding: 1rem;
+      width: 6rem;
+      height: 3rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.2rem;
+      &:hover {
+        background-color: teal;
+      }
+    }
+  }
+}
+.activeRow {
+  background-color: #000;
+}
+
+.nameBtn {
+  font-weight: bold;
+  cursor: pointer;
+  &:hover {
+    color: #04dcf8;
+  }
+}
+.activeName {
+  color: #04dcf8;
+}
+
+.status {
+  border: none;
+  border-radius: 50%;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin: 0.3rem;
+
+  &.Active {
+    background-color: #3bb077;
+  }
+
+  &.Inactive {
+    background-color: #d95087;
+  }
+}
+.loaderContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 15rem;
+  /* HTML: <div class="loader"></div> */
+  .loader {
+    width: 50px;
+    padding: 8px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: #25b09b;
+    --_m: conic-gradient(#0000 10%, #000), linear-gradient(#000 0 0) content-box;
+    -webkit-mask: var(--_m);
+    mask: var(--_m);
+    -webkit-mask-composite: source-out;
+    mask-composite: subtract;
+    animation: l3 1s infinite linear;
+  }
+  @keyframes l3 {
+    to {
+      transform: rotate(1turn);
+    }
+  }
+}

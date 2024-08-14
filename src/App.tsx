@@ -21,29 +21,29 @@ function App() {
 
   const [error, setError] = useState(false);
 
-  // const refreshToken = async () => {
-  //   try {
-  //     const url = `https://bx-oauth2.aasc.com.vn/bx/oauth2_token/local.66b9a0496cf694.99441544`;
-  // Bị chặn cors không thể tạo refreshToken tự động
+  const [token, setToken] = useState<string>();
 
-  //     const response = await fetch(url, {
-  //       method: "GET",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //     });
-  //     const data = await response.json();
-  //     console.log(data);
-  //   } catch (error) {
-  //     console.log("Error fetching", error);
-  //   }
-  // };
+  const refreshToken = async () => {
+    try {
+      const url = import.meta.env.VITE_REFRESH_TOKEN;
+
+      const response = await fetch(url, {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.json();
+      setToken(data.token);
+    } catch (error) {
+      console.log("Error fetching", error);
+    }
+  };
 
   const fetchUser = async () => {
     try {
-      const url = `${import.meta.env.VITE_BASE_URL}${
-        import.meta.env.VITE_TOKEN
-      }`;
+      const url = `${import.meta.env.VITE_BASE_URL}${token}`;
 
       const response = await fetch(url, {
         method: "GET",
@@ -52,11 +52,7 @@ function App() {
         },
       });
       const data = await response.json();
-
-      console.log(data);
-
       if (ERROR.includes(data.error)) {
-        // refreshToken(); Bị chặn cors không thể tạo refreshToken tự động
         toastifyUtils("error", "Token Auth Not Valid");
         setError(true);
         return;
@@ -79,8 +75,12 @@ function App() {
   };
 
   useEffect(() => {
-    fetchUser();
-  }, []);
+    if(token){
+      fetchUser();
+    }else{
+      refreshToken();
+    }
+  }, [token]);
 
   return (
     <div className="main">
@@ -131,7 +131,9 @@ function App() {
                   <p
                     onClick={(e) => {
                       e.preventDefault();
-                      setActiveUser(user.ID === activeUser?.ID ? undefined : user);
+                      setActiveUser(
+                        user.ID === activeUser?.ID ? undefined : user
+                      );
                     }}
                     className={`nameBtn ${
                       user.ID === activeUser?.ID && "activeName"
@@ -158,7 +160,11 @@ function App() {
             <tr>
               <td colSpan={5}>
                 <div className="loaderContainer">
-                  {error ? <BiSolidErrorAlt size={120} color="red"/> : <div className="loader"></div>}
+                  {error ? (
+                    <BiSolidErrorAlt size={120} color="red" />
+                  ) : (
+                    <div className="loader"></div>
+                  )}
                 </div>
               </td>
             </tr>
